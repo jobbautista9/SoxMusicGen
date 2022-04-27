@@ -1,0 +1,111 @@
+SoxMusicGen
+-----------
+
+A Perl 5 module making it easier to create music with the power of SoX
+synths as well as your custom samples.
+
+If you're one of these people:
+
+- a Perl programmer
+- suck at reading sheet music
+- finds MML too difficult
+- too lazy to learn FamiTracker
+- think that scientific note duration is the best thing since sliced bread
+- used libsox.sh, the predecessor of this module
+
+Then try this crappy module of mine!
+
+Some features of this module:
+
+- Easy to write syntax for inputting notes (e.g. "$qu:A4")
+ - Inspired from korobeiniki.sh of the dsuni/bashtris repository
+- Supports multiple note harmonies ("$ei:A4/C5")
+ - Unlike before in libsox.sh you can do as many notes as you want!
+  - Like this: "$dei:C6/A5/G5/B5/F4/D3/G3/B4"
+- Supports every synth type included in SoX
+- You can use your own samples as well
+ - Your samples should be encoded in a format supported by SoX, like wav
+- Adheres to the Unix philosophy of "do one thing and do it well"
+
+What this library doesn't support:
+
+- Harmonies with different durations or instruments
+ - e.g. countermelodies and background melodies
+ - I suggest doing two separate scripts, sox them into two files, then
+   play both either merged or mixed
+
+Usage
+-----
+
+# Paste the following in your child script:
+
+use lib 'path/to/module'; # most likely either .. or .
+use SoXMusicGen;
+
+our @notes;
+
+setTempo(BPM); # Replace "BPM" with integer
+setDefaultSynthType(""); # Choose from sin, square, triangle, pluck, etc.
+our $maxSynthChannels=1; # Set as many as needed
+
+# If using more than two channels...
+setDefaultSynthType("", "", ""); # Number of synths set must match number
+our $maxSynthChannels=4;         # of audio channels
+
+# If you're using custom samples...
+our $synthSampleRate=44100; # Your synth sample rate must match the SR of
+                            # your custom samples, which might be 44.1kHz.
+our $maxSamplesChannels=2; # How much notes of your custom samples to play
+                           # at the same time. If your custom samples use 2
+                           # channels per note, set $maxSynthChannels to 4.
+                           # That's if you want to use both synths and samples
+our $samplesDir="path/to/samples";   # Every file must be formatted as
+                                     # NOTE.ext, like A#4.wav and C3.aiff
+
+# To print the sox pipes...
+createSynths(); # for synths
+createSamples(); # for custom samples
+
+# Refer to the child scripts included in this repo for more examples
+
+Example child script syntax
+---------------------------
+
+./music.pl | xargs play -S -V1 # Plays into SoX once
+
+./music.pl | xargs ./myplay-repeat.sh 1 # Plays into SoX twice
+
+./music.pl | xargs ./mysox.sh music.wav # Saves into "music.wav" using SoX
+
+./music.pl | head -n +37 | xargs play -S -V1 ; ./music.pl | tail -n +37 |
+   xargs ./myplay-repeat.sh 3 # Plays line 1 to 37 of music.pl's output once,
+                                 then plays the rest thrice
+
+./music.pl | xargs ./mysox.sh - | cvlc - # Saves into stdout then pipes it into
+                                           vlc
+./music.pl > music.txt # Redirects music.pl's output to a text file
+
+./music.pl | xclip -i # Copies music.pl's output to XA_PRIMARY
+
+License
+-------
+
+Copyright (C) 2022 Job Bautista
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
