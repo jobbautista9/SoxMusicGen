@@ -44,11 +44,9 @@ setDefaultSynthType(@synths);
 our @notestemp=<STDIN>;
 
 for my $note (@notestemp) {
- if ($note ne "\n") { # Check first if string is just a trailing newline,
-  $note =~ s/(\$\w+)/$1/ee; # Evaluate variable names in stdin
-  $note =~ s/\R\z//; # Remove trailing newlines, else xargs will get confused
-  push (@notes, $note);
- }                    # we don't want to print a forever synth after all
+ $note =~ s/(\$\w+)/$1/ee; # Evaluate variable names in stdin
+ $note =~ s/\R\z//; # Remove trailing newlines, else xargs will get confused
+ push (@notes, $note);
 }
 
 createSynths();

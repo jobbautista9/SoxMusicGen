@@ -73,19 +73,23 @@ our $synthSampleRate=48000;
 
 sub createSynths {
  foreach my $note (@notes) {
-  my @currentNote = split(':', $note);
-  print '"|sox -r ', $synthSampleRate, ' -n -p synth ',
-        POSIX::floor($currentNote[0]*1000)/1000;
-  my @pitches = split('/', uc $currentNote[1]);
-  for my $currentSynthAndPitch (iterate(0,$maxSynthChannels-1)) {
-   print ' ', $synthtype[$currentSynthAndPitch];
-   if(exists($pitches[$currentSynthAndPitch])) {
-    print ' ', $pitches[$currentSynthAndPitch];
-   } else {
-    print ' ', $pitches[-1];
+  if ($note ne "") { # We don't want to print a forever synth
+   my @currentNote = split(':', $note);
+   print '"|sox -r ', $synthSampleRate, ' -n -p synth ',
+         POSIX::floor($currentNote[0]*1000)/1000;
+   my @pitches = split('/', uc $currentNote[1]);
+   for my $currentSynthAndPitch (iterate(0,$maxSynthChannels-1)) {
+    print ' ', $synthtype[$currentSynthAndPitch];
+    if(exists($pitches[$currentSynthAndPitch])) {
+     print ' ', $pitches[$currentSynthAndPitch];
+    } else {
+     print ' ', $pitches[-1];
+    }
    }
-  }
-  print '"', "\n";
+   print '"', "\n";
+  } else {
+   print "\n"; # For compatibility with libsox.sh scripts that differentiated
+  }            # loop and non-loop parts
  }
  @notes = (); # You usually want to reset the notes array after calling this
 }
@@ -106,22 +110,26 @@ our $maxSamplesChannels=1;
 
 sub createSamples {
  foreach my $note (@notes) {
-  my @currentNote = split(':', $note);
-  my @pitches = split('/', uc $currentNote[1]);
-  if($maxSamplesChannels == 1) {
-   print '"|sox ', $samplesDir, '/', uc $pitches[0], '.* -p ',
-         'trim 0 ', POSIX::floor($currentNote[0]*1000)/1000, '"', "\n";
-  } else {
-   print '"|sox -M ';
+  if ($note ne "") {
+   my @currentNote = split(':', $note);
+   my @pitches = split('/', uc $currentNote[1]);
+   if($maxSamplesChannels == 1) {
+    print '"|sox ', $samplesDir, '/', uc $pitches[0], '.* -p ',
+          'trim 0 ', POSIX::floor($currentNote[0]*1000)/1000, '"', "\n";
+   } else {
+    print '"|sox -M ';
    for my $currentSample (iterate(0,$maxSamplesChannels-1)) {
-    if(exists($pitches[$currentSample])) {
-     print $samplesDir, '/', uc $pitches[$currentSample], '.* ';
-    } else {
-     print $samplesDir, '/', uc $pitches[-1], '.* ';
+     if(exists($pitches[$currentSample])) {
+      print $samplesDir, '/', uc $pitches[$currentSample], '.* ';
+     } else {
+      print $samplesDir, '/', uc $pitches[-1], '.* ';
+     }
     }
+    print '-p trim 0 ',
+          POSIX::floor($currentNote[0]*1000)/1000, '"', "\n";
    }
-   print '-p trim 0 ',
-         POSIX::floor($currentNote[0]*1000)/1000, '"', "\n";
+  } else {
+   print "\n";
   }
  }
  @notes = (); # You usually want to reset the notes array after calling this
