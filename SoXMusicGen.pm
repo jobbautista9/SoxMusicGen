@@ -118,7 +118,7 @@ sub createSamples {
           'trim 0 ', POSIX::floor($currentNote[0]*1000)/1000, '"', "\n";
    } else {
     print '"|sox -M ';
-   for my $currentSample (iterate(0,$maxSamplesChannels-1)) {
+    for my $currentSample (iterate(0,$maxSamplesChannels-1)) {
      if(exists($pitches[$currentSample])) {
       print $samplesDir, '/', uc $pitches[$currentSample], '.* ';
      } else {
