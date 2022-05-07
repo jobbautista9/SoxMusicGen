@@ -47,7 +47,7 @@ sub setTempo {
  our $qu=60 / $BPM; # Quarter note
  our $ei=30 / $BPM; # Eighth note
  our $si=15 / $BPM; # Sixteenth note
- our $dha=190 / $BPM; # Dotted-half note
+ our $dha=180 / $BPM; # Dotted-half note
  our $dqu=90 / $BPM; # Dotted-quarter note
  our $dei=45 / $BPM; # Dotted-eighth note
  our $dsi=22.5 / $BPM; # Dotted-sixteenth note
