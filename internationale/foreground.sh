@@ -9,4 +9,4 @@ cat $DIR/verse1 \
     $DIR/verse6/1 $DIR/dsdsdds $DIR/verse6/2 \
     $DIR/verse7 \
     $DIR/chorus/1 $DIR/chorus/2 |
-../stdin/samples.pl 100 4 2 ../piano/ff
+../stdin/samples.pl 100 2 ../piano/ff

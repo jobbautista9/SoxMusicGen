@@ -30,9 +30,8 @@ use SoXMusicGen;
 
 our @notes;
 setTempo($ARGV[0]);
-our $maxSynthChannels=$ARGV[1];
-our $maxSamplesChannels=$ARGV[2];
-our $samplesDir=$ARGV[3];
+our $maxSamplesChannels=$ARGV[1];
+our $samplesDir=$ARGV[2];
 
 our @notestemp=<STDIN>;
 
