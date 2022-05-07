@@ -14,4 +14,4 @@ cat 00 \
     04 \
     04-05-common \
     05 |
-../stdin/synths.pl 180 6 square square triangle square square sawtooth
+../stdin/synths.pl 180 48000 6 square square triangle square square sawtooth

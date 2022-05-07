@@ -30,10 +30,11 @@ use SoXMusicGen;
 
 our @notes;
 setTempo($ARGV[0]);
-our $maxSynthChannels=$ARGV[1];
+our $synthSampleRate=$ARGV[1];
+our $maxSynthChannels=$ARGV[2];
 
 my @synths;
-for my $synth (iterate(2,@ARGV)) {
+for my $synth (iterate(3,@ARGV)) {
  if (exists($ARGV[$synth])) {
   push (@synths, $ARGV[$synth]);
  }
